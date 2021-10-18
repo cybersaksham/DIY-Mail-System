@@ -9,5 +9,5 @@ app.use(express.json());
 
 // Listening
 app.listen(port, () => {
-  console.log(`Login Page Backend is listening at http://localhost:${port}`);
+  console.log(`Mail System Backend is listening at http://localhost:${port}`);
 });
