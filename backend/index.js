@@ -43,7 +43,7 @@ app.post("/send_mail", async (req, res) => {
       attachments: attachmentList,
       subject: subject, // Subject line
       text: text ? text : "", // plain text body
-      html: html ? html : "", // html body
+      // html: html ? html : "", // html body
     });
 
     return res.status(200).send({ success: "Email Sent Successfully" });
