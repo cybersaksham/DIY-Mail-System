@@ -82,3 +82,24 @@ textarea {
 #submitBtn:hover {
   background-color: wheat;
 }
+
+@media only screen and (max-width: 750px) {
+  .formItem {
+    width: 95%;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  #mainComponent h1 {
+    font-size: 18px;
+  }
+
+  .formItem h3 {
+    display: none;
+  }
+
+  .formItem input,
+  .formItem textarea {
+    width: 100%;
+  }
+}
