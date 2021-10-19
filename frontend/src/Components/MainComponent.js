@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function MainComponent() {
   const HOST = "http://localhost:5000";
+  const [ccCount, setCcCount] = useState([]);
+
+  const getCC = (initialCC) => {
+    let newCC = initialCC;
+    ccCount.forEach((el) => {
+      if (el !== "") newCC += "," + el;
+    });
+    return newCC;
+  };
 
   const timeout = () => {
     if (localStorage["alertTime"] != null)
@@ -45,7 +54,6 @@ export default function MainComponent() {
         }
       }
     }
-    console.log(formData);
 
     // Formatting Data
     let finalData = {};
@@ -54,10 +62,9 @@ export default function MainComponent() {
     finalData["pass"] = formData["pass"];
     finalData["subject"] = formData["subject"];
     finalData["toList"] = formData["to"];
-    finalData["ccList"] = formData["cc"];
+    finalData["ccList"] = getCC(formData["cc"]);
     finalData["bccList"] = formData["bcc"];
     finalData["text"] = formData["message"];
-    console.log(finalData);
 
     // Sending Request
     const response = await fetch(HOST + "/send_mail", {
@@ -68,9 +75,31 @@ export default function MainComponent() {
       body: JSON.stringify(finalData),
     });
     const json = await response.json();
-    console.log(json);
     if (json.error) showError(json.error);
-    else showSuccess(json.success);
+    else {
+      form.reset();
+      setCcCount([]);
+      showSuccess(json.success);
+    }
+  };
+
+  const addCCCount = () => {
+    setCcCount([...ccCount, ""]);
+  };
+
+  const removeCCCount = (i) => {
+    setCcCount([
+      ...ccCount.slice(0, i),
+      ...ccCount.slice(i + 1, ccCount.length),
+    ]);
+  };
+
+  const ccChange = (i, e) => {
+    setCcCount([
+      ...ccCount.slice(0, i),
+      e.target.value,
+      ...ccCount.slice(i + 1, ccCount.length),
+    ]);
   };
 
   return (
@@ -133,8 +162,27 @@ export default function MainComponent() {
             name="cc"
             placeholder="Enter cc if any"
             id="ccEmail"
+            className="prefixInput"
           />
+          <span className="suffixSpan" onClick={addCCCount}>
+            +
+          </span>
         </div>
+        {ccCount.map((x, i) => (
+          <div className="formItem" key={i}>
+            <h3> </h3>
+            <input
+              type="email"
+              placeholder="Enter cc if any"
+              className="prefixInput"
+              value={x}
+              onChange={(e) => ccChange(i, e)}
+            />
+            <span className="suffixSpan" onClick={() => removeCCCount(i)}>
+              -
+            </span>
+          </div>
+        ))}
         <div className="formItem">
           <h3>BCC</h3>
           <input
@@ -142,7 +190,9 @@ export default function MainComponent() {
             name="bcc"
             placeholder="Enter bcc if any"
             id="bccEmail"
+            className="prefixInput"
           />
+          <span className="suffixSpan">+</span>
         </div>
         <div className="formItem" id="msgItem">
           <h3>Message</h3>

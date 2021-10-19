@@ -66,6 +66,21 @@ textarea {
   border-radius: 5px;
 }
 
+.prefixInput {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  width: 77% !important;
+}
+
+.suffixSpan {
+  background-color: grey;
+  padding: 5.7px 0;
+  width: 3%;
+  text-align: center;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
 #msgItem {
   align-items: flex-start;
 }
@@ -87,6 +102,14 @@ textarea {
   .formItem {
     width: 95%;
   }
+
+  .prefixInput {
+    width: 75% !important;
+  }
+
+  .suffixSpan {
+    width: 5%;
+  }
 }
 
 @media only screen and (max-width: 550px) {
@@ -101,5 +124,13 @@ textarea {
   .formItem input,
   .formItem textarea {
     width: 100%;
+  }
+
+  .prefixInput {
+    width: 90% !important;
+  }
+
+  .suffixSpan {
+    width: 10%;
   }
 }
