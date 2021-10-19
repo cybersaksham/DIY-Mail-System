@@ -3,6 +3,7 @@ import React, { useState } from "react";
 export default function MainComponent() {
   const HOST = "http://localhost:5000";
   const [ccCount, setCcCount] = useState([]);
+  const [bccCount, setBccCount] = useState([]);
 
   const getCC = (initialCC) => {
     let newCC = initialCC;
@@ -10,6 +11,14 @@ export default function MainComponent() {
       if (el !== "") newCC += "," + el;
     });
     return newCC;
+  };
+
+  const getBCC = (initialBCC) => {
+    let newBCC = initialBCC;
+    bccCount.forEach((el) => {
+      if (el !== "") newBCC += "," + el;
+    });
+    return newBCC;
   };
 
   const timeout = () => {
@@ -63,7 +72,7 @@ export default function MainComponent() {
     finalData["subject"] = formData["subject"];
     finalData["toList"] = formData["to"];
     finalData["ccList"] = getCC(formData["cc"]);
-    finalData["bccList"] = formData["bcc"];
+    finalData["bccList"] = getBCC(formData["bcc"]);
     finalData["text"] = formData["message"];
 
     // Sending Request
@@ -79,6 +88,7 @@ export default function MainComponent() {
     else {
       form.reset();
       setCcCount([]);
+      setBccCount([]);
       showSuccess(json.success);
     }
   };
@@ -99,6 +109,25 @@ export default function MainComponent() {
       ...ccCount.slice(0, i),
       e.target.value,
       ...ccCount.slice(i + 1, ccCount.length),
+    ]);
+  };
+
+  const addBCCCount = () => {
+    setBccCount([...bccCount, ""]);
+  };
+
+  const removeBCCCount = (i) => {
+    setBccCount([
+      ...bccCount.slice(0, i),
+      ...bccCount.slice(i + 1, bccCount.length),
+    ]);
+  };
+
+  const bccChange = (i, e) => {
+    setBccCount([
+      ...bccCount.slice(0, i),
+      e.target.value,
+      ...bccCount.slice(i + 1, bccCount.length),
     ]);
   };
 
@@ -192,8 +221,25 @@ export default function MainComponent() {
             id="bccEmail"
             className="prefixInput"
           />
-          <span className="suffixSpan">+</span>
+          <span className="suffixSpan" onClick={addBCCCount}>
+            +
+          </span>
         </div>
+        {bccCount.map((x, i) => (
+          <div className="formItem" key={i}>
+            <h3> </h3>
+            <input
+              type="email"
+              placeholder="Enter bcc if any"
+              className="prefixInput"
+              value={x}
+              onChange={(e) => bccChange(i, e)}
+            />
+            <span className="suffixSpan" onClick={() => removeBCCCount(i)}>
+              -
+            </span>
+          </div>
+        ))}
         <div className="formItem" id="msgItem">
           <h3>Message</h3>
           <textarea
