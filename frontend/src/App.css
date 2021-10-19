@@ -21,6 +21,21 @@ textarea {
   margin: 20px 0;
 }
 
+#status {
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+  height: 15px;
+}
+
+#errorText {
+  color: red;
+}
+
+#successText {
+  color: green;
+}
+
 #mainComponent h1 {
   margin-bottom: 10px;
 }

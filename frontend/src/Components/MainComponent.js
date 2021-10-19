@@ -3,6 +3,28 @@ import React from "react";
 export default function MainComponent() {
   const HOST = "http://localhost:5000";
 
+  const timeout = () => {
+    if (localStorage["alertTime"] != null)
+      clearTimeout(localStorage["alertTime"]);
+    let s = setTimeout(() => {
+      document.getElementById("successText").innerText = "";
+      document.getElementById("errorText").innerText = "";
+    }, 2500);
+    localStorage["alertTime"] = s;
+  };
+
+  const showError = (txt) => {
+    document.getElementById("errorText").innerText = txt;
+    document.getElementById("successText").innerText = "";
+    timeout();
+  };
+
+  const showSuccess = (txt) => {
+    document.getElementById("successText").innerText = txt;
+    document.getElementById("errorText").innerText = "";
+    timeout();
+  };
+
   const submitForm = async (e) => {
     e.preventDefault();
 
@@ -17,7 +39,10 @@ export default function MainComponent() {
     // Checking for empty fields
     for (const key in formData) {
       if (key !== "cc" && key !== "bcc") {
-        if (formData[key] === "") return;
+        if (formData[key] === "") {
+          showError("Enter all details");
+          return;
+        }
       }
     }
     console.log(formData);
@@ -44,11 +69,17 @@ export default function MainComponent() {
     });
     const json = await response.json();
     console.log(json);
+    if (json.error) showError(json.error);
+    else showSuccess(json.success);
   };
 
   return (
     <div id="mainComponent">
       <h1>DIY Mail System</h1>
+      <div id="status">
+        <p id="errorText"></p>
+        <p id="successText"></p>
+      </div>
       <form action="" id="mailForm" onSubmit={submitForm}>
         <div className="formItem">
           <h3>Name</h3>

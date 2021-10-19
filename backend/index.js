@@ -48,7 +48,7 @@ app.post("/send_mail", async (req, res) => {
 
     return res.status(200).send({ success: "Email Sent Successfully" });
   } catch (e) {
-    return res.status(500).send({ error: e });
+    return res.status(500).send({ error: "Check your credentials" });
   }
 });
 
