@@ -79,24 +79,28 @@ export default function MainComponent() {
     finalData["bccList"] = getBCC(formData["bcc"]);
     finalData["text"] = formData["message"];
 
-    // Sending Request
-    const response = await fetch(HOST + "/send_mail", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(finalData),
-    });
-    const json = await response.json();
-    if (json.error) showError(json.error);
-    else {
-      form.reset();
-      setCcCount([]);
-      setBccCount([]);
-      showSuccess(json.success);
+    try {
+      // Sending Request
+      const response = await fetch(HOST + "/send_mail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(finalData),
+      });
+      const json = await response.json();
+      if (json.error) showError(json.error);
+      else {
+        form.reset();
+        setCcCount([]);
+        setBccCount([]);
+        showSuccess(json.success);
+      }
+    } catch (e) {
+      showError("Some error occurred");
+    } finally {
+      btn.innerHTML = "Send Email";
     }
-
-    btn.innerHTML = "Send Email";
   };
 
   const addCCCount = () => {
