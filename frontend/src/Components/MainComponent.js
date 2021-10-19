@@ -46,6 +46,8 @@ export default function MainComponent() {
   const submitForm = async (e) => {
     e.preventDefault();
 
+    const btn = document.getElementById("submitBtn");
+
     // Getting form data
     const form = document.getElementById("mailForm");
     let formData = {};
@@ -63,6 +65,8 @@ export default function MainComponent() {
         }
       }
     }
+
+    btn.innerHTML = "Sending...";
 
     // Formatting Data
     let finalData = {};
@@ -91,6 +95,8 @@ export default function MainComponent() {
       setBccCount([]);
       showSuccess(json.success);
     }
+
+    btn.innerHTML = "Send Email";
   };
 
   const addCCCount = () => {
